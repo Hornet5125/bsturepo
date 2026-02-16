@@ -4,7 +4,7 @@ int main(){
     int mult,platform_S;
     int num;
     std::cin >> n >> m >> a;
-    platform_S = n*m;
+    platform_S = a*a;
     mult = n*m;
     for (num = 0 ; mult > 0; num++){
         mult -= platform_S;
