@@ -5,6 +5,9 @@ int main(){
     int num1,num2;
     double num;
     std::cin >> n >> m >> a;
+    if (n || m || a > 1000){
+        return 0;
+    }
     for (num1 = 0 ; n > 0; num1++){
         n -= a;
     }
