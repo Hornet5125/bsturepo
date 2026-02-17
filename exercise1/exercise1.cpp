@@ -2,7 +2,8 @@
 int main(){
     int n,m,a; 
     int mult,platform_S;
-    int num,num1,num2;
+    int num1,num2;
+    double num;
     std::cin >> n >> m >> a;
     for (num1 = 0 ; n > 0; num1++){
         n -= a;
