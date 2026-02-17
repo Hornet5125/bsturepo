@@ -1,8 +1,8 @@
 #include <iostream> // A. Выражение
 int main(){
-    int a,b,c;
-    int x=0,x2=0,x3=0;
-    int num1=0,result;
+    long long a,b,c;
+    long long x=0,x2=0,x3=0;
+    long long num1=0,result;
     std::cin >> a >> b >> c;
     if (a == 1 || b == 1 || c == 1){
         if (a == 1){
@@ -33,10 +33,7 @@ int main(){
             else result = a*(b+c);
         }
         if (x3 == 1 && num1 == 1){
-            if (a*(b+c) > (a+b)*c){
-                result = a*(b+c);
-            }
-            else result = (a+b)*c;
+            result = a*(b+c);
         }
     }
     if (a != 1 && b != 1 && c != 1) {
