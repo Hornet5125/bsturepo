@@ -36,17 +36,15 @@ int main(){
             result = a*(b+c);
         }
     }
-    if (a != 1 && b != 1 && c != 1) {
-        if ((a+b)*c > a*(b+c)){
+        if ((a+b)*c > result){
             result = (a+b)*c;
         } 
-        if (a*(b+c) > (a+b)*c){
+        if (a*(b+c) > result){
             result = a*(b+c);
         }
         if (a*b*c > result){
             result = a*b*c;
         }
-    }
     std::cout << result << std::endl;
     return 0;
 }
