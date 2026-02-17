@@ -1,8 +1,7 @@
 #include <iostream> // Задача за 1000 "Театральная площадь"
 int main(){
     int n,m,a; 
-    int mult,platform_S;
-    int num1,num2;
+    long long num1,num2;
     long long int num;
     std::cin >> n >> m >> a;
     for (num1 = 0 ; n > 0; num1++){
