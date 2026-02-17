@@ -24,7 +24,7 @@ int main(){
             result = a+b+c;
         }
         if (x == 1 && num1 == 1){
-            result = a+b*c;
+            result = (a+b)*c;
         }
         if (x2 == 1 && num1 == 1){
             if ((a+b)*c > a*(b+c)){
