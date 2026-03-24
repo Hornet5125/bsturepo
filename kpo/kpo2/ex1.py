@@ -1,19 +1,16 @@
-def binary_search(arr, target):
-    left = 0
-    right = len(arr) - 1
-
-    while left <= right:
-        mid = (left + right) // 2
-        if arr[mid] == target:
-            return mid  # Элемент найден
-        elif arr[mid] < target:
-            left = mid + 1  # Ищем в правой половине
-        else:
-            right = mid - 1  # Ищем в левой половине
-        
-    return -1  # Элемент не найден
-
-my_list = [1, 3, 5, 7, 9, 11, 13]
-target = 7
-result = binary_search(my_list, target)
-print(f"Индекс элемента: {result}")
+def bubble_sort():
+    n = input("Введите количество элементов ")
+    arr = [input() for i in range(n)]
+    sorted_arr = arr.copy()
+    for k in range(n-1):
+        swapped = False
+        for j in range(n-1-k):
+            num1 = int(sorted_arr[j], 2)
+            num2 = int(sorted_arr[j + 1], 2)
+            if num1>num2:
+                sorted_arr[j], sorted_arr[j+1] = sorted_arr[j+1], sorted_arr[j]
+                swapped = True
+        if not swapped: 
+            break
+    return sorted_arr
+print (bubble_sort)
