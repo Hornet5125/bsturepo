@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 using namespace::std;
 int main(){
     int x;
@@ -8,6 +9,7 @@ int main(){
     int time;
     int y;
     int temporary;
+    int element;
     char stanciya[50];
     cout << "Введите кол-во поездов: ";
     cin >> n;
@@ -44,7 +46,8 @@ int main(){
         time_of_arrival arrival_time;
         int traveldays;
         int timetostay_mins;
-    }arr[5],temp;
+    }temp;
+    train_schedule* arr = new train_schedule[n+1];
     while (int inf = 1 == 1){
         cout << "1) Ввод массива структур" << endl;
         cout << "2) Сортировка массива структур" << endl;
@@ -60,6 +63,7 @@ int main(){
                 for (int i = 0; i<n; i++){
                     cin >> arr[i].number >> arr[i].station >> arr[i].traveldays;
                     cin >> time; 
+                    cin >> arr[i].timetostay_mins;
                     arr[i].arrival_time = static_cast<time_of_arrival>(time);
                 }
                 break;
@@ -154,13 +158,32 @@ int main(){
                     }
                 break;
             case 4:
-                cout << "WW" << endl;
+                cout << "Введите номер поезда " << endl;
+                cin >> temporary;
+                for (int i = 0; i<n; i++){
+                    if (temporary == arr[i].number){
+                        cout << "Выберите изменяемый элемент " << endl;
+                        cout << "1 Номер " << endl << "2 Станция " << endl << "3 Время прибытия " << endl
+                        << "4 Время в пути " << endl << "5 Время стоянок "
+                        << endl; 
+                        cin >> element;
+                        switch(element){
+                            case 1: 
+                                
+                        }
+                    }
+                }
                 break;
             case 5:
                 cout << "penis" << endl;
                 break;
             case 6:
-                cout << "WW" << endl;
+                for (int i=0; i<n;i++){
+                    cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
+                    endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                    "Время стоянок " << arr[i].timetostay_mins
+                    << endl;
+                }
                 break;
             case 7: 
                 return 0;
