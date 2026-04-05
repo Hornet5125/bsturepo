@@ -1,19 +1,14 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-using namespace::std;
-int main(){
-    int x;
+using namespace std;
+int number(){
     int n;
-    int i;
-    int time;
-    int y;
-    int temporary;
-    int element;
-    char stanciya[50];
-    cout << "Введите кол-во поездов: ";
+    cout << "Введите количество поездов: ";
     cin >> n;
-    enum time_of_arrival {
+    return n;
+}
+enum time_of_arrival {
             time0= 0,
             time1= 1,
             time2= 2,
@@ -40,15 +35,29 @@ int main(){
             time23= 23,
             time24 = 24
         };
-    struct train_schedule{
-        int number;
-        char station[50];
-        time_of_arrival arrival_time;
-        int traveldays;
-        int timetostay_mins;
-    }temp;
-    train_schedule* arr = new train_schedule[n+1];
-    while (int inf = 1 == 1){
+struct train_schedule{
+    int number;
+    char station[50];
+    time_of_arrival arrival_time;
+    int traveldays;
+    int timetostay_mins;
+};
+train_schedule* createTrainSchedule(int n) {
+    train_schedule* arr = new train_schedule[n + 1];
+    return arr;
+}
+int main(){
+    int x;
+    int n;
+    n = number();
+    int i;
+    int time;
+    int y;
+    int temporary;
+    int element;
+    char stanciya[50];
+    train_schedule* arr = nullptr;
+    while (true){
         cout << "1) Ввод массива структур" << endl;
         cout << "2) Сортировка массива структур" << endl;
         cout << "3) Поиск в массиве структур по заданному параметру" << endl;
@@ -60,6 +69,8 @@ int main(){
         cin >> x;
         switch(x){
             case 1:
+                delete[] arr;
+                arr = createTrainSchedule(n);
                 for (int i = 0; i<n; i++){
                     cin >> arr[i].number >> arr[i].station >> arr[i].traveldays;
                     cin >> time; 
@@ -71,12 +82,13 @@ int main(){
                 for (int i = 0; i < n - 1; i++) {
                     for (int j = 0; j < n - i - 1; j++) {
                         if (arr[j].number > arr[j + 1].number){
-                            temp = arr[j];
+                            train_schedule temp = arr[j];
                             arr[j] = arr[j + 1];
                             arr[j + 1] = temp;
                         }
                     }
                 }
+                cout << "Отсортировано" << endl;
                 break;
             case 3: 
                 cout << "Выберите параметр: " << endl;
@@ -89,7 +101,7 @@ int main(){
                 cin >> y;
                 switch (y) {
                     case 1 : 
-                        cout << "Введите номер поезда  " << endl;
+                        cout << "Введите номер поезда:  " << endl;
                         cin >> temporary;
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].number){
@@ -98,24 +110,22 @@ int main(){
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
-                            else break;
                         }
                         break;
                     case 2 :
-                        cout << "Введите станцию " << endl;
+                        cout << "Введите станцию: " << endl;
                         cin >> stanciya;
                         for (int i = 0; i<n;i++){
-                            if (stanciya==arr[i].station){
+                            if (strcmp(stanciya, arr[i].station) == 0){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
                                 endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
-                            else break;
                         }
                         break;
                     case 3 :
-                        cout << "Введите прибытия " << endl;
+                        cout << "Введите время прибытия: " << endl;
                         cin >> temporary;
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].arrival_time){
@@ -124,11 +134,10 @@ int main(){
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
-                            else break;
                         }
                         break;
                     case 4 :
-                        cout << "Введите время в пути " << endl;
+                        cout << "Введите время в пути: " << endl;
                         cin >> temporary;
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].traveldays){
@@ -137,11 +146,10 @@ int main(){
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
-                            else break;
                         }
                         break;
                     case 5 :
-                        cout << "Введите время стоянки " << endl;
+                        cout << "Введите время стоянки: " << endl;
                         cin >> temporary;
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].timetostay_mins){
@@ -150,15 +158,14 @@ int main(){
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
-                            else break;
                         }
                         break;
-                    case 6 :
+                    default :
                         break;
                     }
                 break;
             case 4:
-                cout << "Введите номер поезда " << endl;
+                cout << "Введите номер поезда: " << endl;
                 cin >> temporary;
                 for (int i = 0; i<n; i++){
                     if (temporary == arr[i].number){
@@ -168,14 +175,48 @@ int main(){
                         << endl; 
                         cin >> element;
                         switch(element){
-                            case 1: 
+                            case 1:
+                                cout << "Введите новый номер: ";
+                                cin >> arr[i].number;
+                                break;
+                            case 2:
+                                cout << "Введите новую станцию: ";
+                                cin.ignore();
+                                cin.getline(arr[i].station, 50);
+                                break;
+                            case 3:
+                                cout << "Введите новое время прибытия: ";
+                                cin >> time;
+                                arr[i].arrival_time = static_cast<time_of_arrival>(time);
+                                break;
+                            case 4:
+                                cout << "Введите новое время в пути: ";
+                                cin >> arr[i].traveldays;
+                                break;
+                            case 5:
+                                cout << "Введите новое время стоянки: ";
+                                cin >> arr[i].timetostay_mins;
+                                break;
+                            default:
+                                break;
                                 
                         }
                     }
                 }
                 break;
             case 5:
-                cout << "penis" << endl;
+                cout << "Введите номер поезда для удаления: ";
+                cin >> temporary;
+                for (int i = 0; i < n; i++) {
+                    if (temporary == arr[i].number) {
+                        for (int j = i; j < n - 1; j++) {
+                            arr[j] = arr[j + 1];
+                        }
+                        n--;
+                        cout << "Поезд удален." << endl;
+                        break;
+                    }
+                }
                 break;
             case 6:
                 for (int i=0; i<n;i++){
@@ -185,7 +226,7 @@ int main(){
                     << endl;
                 }
                 break;
-            case 7: 
+            default: 
                 return 0;
         }
     }
