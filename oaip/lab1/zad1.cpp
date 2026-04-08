@@ -1,6 +1,4 @@
 #include <iostream>
-#include <string>
-#include <cstring>
 using namespace std;
 int number(){
     int n;
@@ -48,8 +46,7 @@ train_schedule* createTrainSchedule(int n) {
 }
 int main(){
     int x;
-    int n;
-    n = number();
+    int n = number();
     int i;
     int time;
     int y;
@@ -72,9 +69,11 @@ int main(){
                 delete[] arr;
                 arr = createTrainSchedule(n);
                 for (int i = 0; i<n; i++){
-                    cin >> arr[i].number >> arr[i].station >> arr[i].traveldays;
-                    cin >> time; 
-                    cin >> arr[i].timetostay_mins;
+                    cout << "Введите номер: "; cin >> arr[i].number;
+                    cout << "Введите станцию: "; cin >> arr[i].station;
+                    cout << "Введите время прибытия: "; cin >> time;
+                    cout << "Введите время пути(Дни): "; cin >> arr[i].traveldays;
+                    cout << "Введите время стоянок: "; cin >> arr[i].timetostay_mins;
                     arr[i].arrival_time = static_cast<time_of_arrival>(time);
                 }
                 break;
@@ -99,14 +98,14 @@ int main(){
                 cout << " 5) Время стоянки" << endl;
                 cout << " 6) Выход" << endl;
                 cin >> y;
-                switch (y) {
+                switch (y){
                     case 1 : 
                         cout << "Введите номер поезда:  " << endl;
                         cin >> temporary;
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].number){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
@@ -118,7 +117,7 @@ int main(){
                         for (int i = 0; i<n;i++){
                             if (strcmp(stanciya, arr[i].station) == 0){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
@@ -130,7 +129,7 @@ int main(){
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].arrival_time){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
@@ -142,7 +141,7 @@ int main(){
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].traveldays){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
@@ -154,7 +153,7 @@ int main(){
                         for (int i = 0; i<n;i++){
                             if (temporary==arr[i].timetostay_mins){
                                 cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                                endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                                 "Время стоянок " << arr[i].timetostay_mins
                                 << endl;
                             } 
@@ -170,7 +169,7 @@ int main(){
                 for (int i = 0; i<n; i++){
                     if (temporary == arr[i].number){
                         cout << "Выберите изменяемый элемент " << endl;
-                        cout << "1 Номер " << endl << "2 Станция " << endl << "3 Время прибытия " << endl
+                        cout << "1 Номер " << endl << "2 Станция " << endl << "3 Время прибытия(Дни) " << endl
                         << "4 Время в пути " << endl << "5 Время стоянок "
                         << endl; 
                         cin >> element;
@@ -185,7 +184,7 @@ int main(){
                                 cin.getline(arr[i].station, 50);
                                 break;
                             case 3:
-                                cout << "Введите новое время прибытия: ";
+                                cout << "Введите новое время прибытия(Дни): ";
                                 cin >> time;
                                 arr[i].arrival_time = static_cast<time_of_arrival>(time);
                                 break;
@@ -221,7 +220,7 @@ int main(){
             case 6:
                 for (int i=0; i<n;i++){
                     cout << "Номер " << arr[i].number << endl << "Станция " << arr[i].station << 
-                    endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути " << arr[i].traveldays << endl <<
+                    endl << "Время прибытия " << arr[i].arrival_time << endl << "Время в пути(Дни): " << arr[i].traveldays << endl <<
                     "Время стоянок " << arr[i].timetostay_mins
                     << endl;
                 }
