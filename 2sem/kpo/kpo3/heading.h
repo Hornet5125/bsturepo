@@ -18,7 +18,7 @@ class Personnel{              // объявляем класс
     Personnel(char* n, int wn, int r) : workshop_number(wn), rank(r) { 
         name = new char[strlen(n) + 1];
         strcpy(name, n);
-        cout << "Конструктор с параметрами вызван для объекта "  << this << endl;  
+        cout << "Конструктор с параметрами вызван для объекта "  << n << endl;  
     }
     // конструктор копирования
     Personnel(const Personnel& chel): workshop_number(chel.workshop_number), rank(chel.rank){
@@ -28,6 +28,7 @@ class Personnel{              // объявляем класс
     }
     // деструктор
     ~Personnel(){
+        cout << "Деструктор вызван для объекта " << name << endl;
         delete[] name;
     }
     // геттеры
