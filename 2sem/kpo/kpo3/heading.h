@@ -1,5 +1,3 @@
-#ifndef Personnel_H
-#define Personnel_H
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -8,7 +6,7 @@ class Personnel{              // объявляем класс
     int workshop_number;      // номер цеха 
     int rank;                 // разряд
     public:                   // поле типа public для описания методов 
-    // конструктор без параметров 
+    // конструктор без параметров
     Personnel() : workshop_number(0), rank(0) {
         name = new char[1];
         name[0] = '\0';
@@ -42,4 +40,3 @@ class Personnel{              // объявляем класс
     void Set(const char* n, int wn, int r);
     void Show();
 };
-#endif
