@@ -1,11 +1,15 @@
 #include "prototypes.h"
 #include <iostream> 
-#include <cstring>
 #include <fstream>
 #include <chrono> 
 #include <string>
+#include <cstring>
 #include <random>
 #include <iomanip>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <conio.h>
 using namespace std;
 struct Record {
     string name;
@@ -129,6 +133,28 @@ public:
         return -1;
     }
 };
+struct TimerData {
+    int (*pyatnashki)[4];
+    atomic<bool>& game_running;
+    atomic<int>& current_moves;
+    chrono::steady_clock::time_point start_time;
+    mutex& display_mutex;
+    atomic<double>& current_time;
+    TimerData(int (*p)[4], atomic<bool>& gr, atomic<int>& cm, 
+              chrono::steady_clock::time_point st, mutex& dm, atomic<double>& ct)
+        : pyatnashki(p), game_running(gr), current_moves(cm), 
+          start_time(st), display_mutex(dm), current_time(ct) {}
+};
+void timer_update_func(TimerData* data) {
+    while (data->game_running) {
+        this_thread::sleep_for(chrono::milliseconds(100));
+        if (data->game_running) {
+            auto now = chrono::steady_clock::now();
+            double elapsed = chrono::duration<double>(now - data->start_time).count();
+            data->current_time = elapsed;
+        }
+    }
+}
 string input_player_name(){
     string name;
     cout << "Введите имя:";
@@ -160,10 +186,23 @@ void input_spawn_point(int pyatnashki[4][4]){
             break;
     }
 }
+void display_game_state(int pyatnashki[4][4], int move_count, double elapsed) {
+    system("cls");
+    display_matrix(pyatnashki);
+    cout << "Ходов сделано: " << move_count << endl;
+    cout << "Время: " << fixed << setprecision(2) << elapsed << " секунд" << endl;
+    cout << "Куда вы хотите двигаться?" << endl;
+    cout << "1 Вверх" << endl;
+    cout << "2 Вниз" << endl;
+    cout << "3 Вправо" << endl;
+    cout << "4 Влево" << endl;
+    cout << "Ваш выбор: " << flush;
+}
 void menu_moves(int pyatnashki[4][4], Leaderboard& leaderboard, string players_name) {
-    int x;
-    int exit = 1;
-    int move_count = 0;
+    char x;
+    atomic<bool> game_running(true);
+    atomic<int> current_moves(0);
+    atomic<double> current_time(0);
     if (!is_solvable(pyatnashki)) {
         int emptyi = -1, emptyj = -1;
         for (int row = 0; row < 4; row++) {
@@ -199,99 +238,84 @@ void menu_moves(int pyatnashki[4][4], Leaderboard& leaderboard, string players_n
                 pyatnashki[i][j] = new_pyatnashki[i][j];
             }
         }
-        system("cls");
     }
     auto start_time = chrono::steady_clock::now();
-    system("cls");
-    while (exit){
-        if (exit == 0){
-            break;
+    thread timer_thread([&]() {
+        auto last_redraw = chrono::steady_clock::now();
+        while (game_running) {
+            this_thread::sleep_for(chrono::milliseconds(100));
+            if (game_running) {
+                auto now = chrono::steady_clock::now();
+                double elapsed = chrono::duration<double>(now - start_time).count();
+                current_time = elapsed;
+                if (chrono::duration<double>(now - last_redraw).count() > 0.5) {
+                    system("cls");
+                    display_matrix(pyatnashki);
+                    cout << "Ходов сделано: " << current_moves.load() << endl;
+                    cout << "Время: " << fixed << setprecision(2) << current_time.load() << " секунд" << endl;
+                    cout << "\nКуда вы хотите двигаться?" << endl;
+                    cout << "1 Вверх" << endl;
+                    cout << "2 Вниз" << endl;
+                    cout << "3 Вправо" << endl;
+                    cout << "4 Влево" << endl;
+                    cout << "Ваш выбор: " << flush;
+                    last_redraw = now;
+                }
+            }
         }
-        auto currentTime = chrono::steady_clock::now();
-        double elapsed = chrono::duration<double>(currentTime - start_time).count();
-        display_matrix(pyatnashki);
-        cout << "Ходов сделано: " << move_count << endl;
-        cout.flush();
-        cout << "Куда вы хотите двигаться? " << endl << "1 Вверх"  
-        << endl << "2 Вниз" << endl << "3 Вправо" << endl << "4 Влево" << endl;
-        cin >> x;
-        switch(x){
-            case 1:
-                move_up_up(pyatnashki);
-                move_count++;
-                if (win_check(pyatnashki)==1){
-                    system("cls");
-                    display_matrix(pyatnashki);
-                    auto endTime = chrono::steady_clock::now();
-                    double finalTime = chrono::duration<double>(endTime - start_time).count();
-                    cout << "Вы победили" << endl;
-                    if (leaderboard.isHighScore(move_count, finalTime)) {
-                        leaderboard.addRecord(players_name, move_count, finalTime);
-                        cout << "Ваше место в рейтинге: " << leaderboard.getRank(move_count, finalTime)-1 << endl;
-                    } else {
-                        cout << "Рекорд не побит. Попробуйте ещё!" << endl;
-                    }
-                    exit = 0;
+    });
+    display_game_state(pyatnashki, 0, 0);
+    while (game_running) {
+        if (_kbhit()) {
+            x = _getch();
+            switch(x){
+                case '1':
+                    move_up_up(pyatnashki);
+                    current_moves++;
+                    break;
+                case '2':
+                    move_down(pyatnashki);
+                    current_moves++;
+                    break;
+                case '3':
+                    move_right(pyatnashki);
+                    current_moves++;
+                    break;
+                case '4':
+                    move_left(pyatnashki);
+                    current_moves++;
+                    break;
+                default:
+                    continue;
+            }
+            double elapsed = current_time.load();
+            display_game_state(pyatnashki, current_moves.load(), elapsed);
+            if (win_check(pyatnashki) == 1) {
+                game_running = false;
+                timer_thread.join();
+                double finalTime = current_time.load();
+                system("cls");
+                display_matrix(pyatnashki);
+                cout << "Победа!" << endl;
+                cout << "Финальное время: " << fixed << setprecision(2) << finalTime << " секунд" << endl;
+                cout << "Всего ходов: " << current_moves.load() << endl;
+                if (leaderboard.isHighScore(current_moves.load(), finalTime)) {
+                    leaderboard.addRecord(players_name, current_moves.load(), finalTime);
+                    int rank = leaderboard.getRank(current_moves.load(), finalTime);
+                    cout << "Ваше место в рейтинге: " << rank << endl;
+                } else {
+                    cout << "Рекорд не побит, попробуйте ещё" << endl;
                 }
+                cout << "Нажмите любую клавишу для продолжения";
+                _getch();
                 break;
-            case 2:
-                move_down(pyatnashki);
-                move_count++;
-                if (win_check(pyatnashki)==1){
-                    system("cls");
-                    display_matrix(pyatnashki);
-                    auto endTime = chrono::steady_clock::now();
-                    double finalTime = chrono::duration<double>(endTime - start_time).count();
-                    cout << "Вы победили" << endl;
-                    if (leaderboard.isHighScore(move_count, finalTime)) {
-                        leaderboard.addRecord(players_name, move_count, finalTime);
-                        cout << "Ваше место в рейтинге: " << leaderboard.getRank(move_count, finalTime)-1 << endl;
-                    } else {
-                        cout << "Рекорд не побит. Попробуйте ещё!" << endl;
-                    }
-                    exit = 0;
-                }
-                break;
-            case 3:
-                move_right(pyatnashki);
-                move_count++;
-                if (win_check(pyatnashki)==1){
-                    system("cls");
-                    display_matrix(pyatnashki);
-                    auto endTime = chrono::steady_clock::now();
-                    double finalTime = chrono::duration<double>(endTime - start_time).count();
-                    cout << "Вы победили" << endl;
-                    if (leaderboard.isHighScore(move_count, finalTime)) {
-                        leaderboard.addRecord(players_name, move_count, finalTime);
-                        cout << "Ваше место в рейтинге: " << leaderboard.getRank(move_count, finalTime)-1 << endl;
-                    } else {
-                        cout << "Рекорд не побит. Попробуйте ещё!" << endl;
-                    }
-                    exit = 0;
-                }
-                break;
-            case 4:
-                move_left(pyatnashki);
-                move_count++;
-                if (win_check(pyatnashki)==1){
-                    system("cls");
-                    display_matrix(pyatnashki);
-                    auto endTime = chrono::steady_clock::now();
-                    double finalTime = chrono::duration<double>(endTime - start_time).count();
-                    cout << "Вы победили" << endl;
-                    if (leaderboard.isHighScore(move_count, finalTime)) {
-                        leaderboard.addRecord(players_name, move_count, finalTime);
-                        cout << "Ваше место в рейтинге: " << leaderboard.getRank(move_count, finalTime)-1 << endl;
-                    } else {
-                        cout << "Рекорд не побит. Попробуйте ещё!" << endl;
-                    }
-                    exit = 0;
-                }
-                break;
-            default: 
-                cout << "Вы ввели неверное число" << endl;
-                break;
+            }
         }
+        this_thread::sleep_for(chrono::milliseconds(10));
+    }
+    if (game_running) {
+        game_running = false;
+        timer_thread.join();
     }
 }
 void menu(int pyatnashki[4][4],Leaderboard& leaderboard){

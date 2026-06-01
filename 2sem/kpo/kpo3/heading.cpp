@@ -2,7 +2,7 @@
 char* Personnel::GetName(){
     return name;
 }
-int Personnel::GetWorkshopNumber() const{
+int Personnel::GetWorkshopNumber(){
     return workshop_number;
 }
 int Personnel::GetRank() {

@@ -2,8 +2,9 @@
 int main(){
     int n = 0; 
     if (n==0)
-        printf(n);
-    else n=5
+        printf("%d",n);
+    else 
+        n=5;
     while (n<10)
         n++;
     for(n=0;n<5;n++)

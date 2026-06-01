@@ -13,7 +13,7 @@ class Personnel{              // объявляем класс
         cout << "Конструктор без параметров" << endl;
     }
     // конструктор с параметрами
-    Personnel(char* n, int wn, int r) : workshop_number(wn), rank(r) { 
+    Personnel(const char* n, int wn, int r) : workshop_number(wn), rank(r) { 
         name = new char[strlen(n) + 1];
         strcpy(name, n);
         cout << "Конструктор с параметрами вызван для объекта "  << n << endl;  
@@ -31,7 +31,7 @@ class Personnel{              // объявляем класс
     }
     // геттеры
     char* GetName();
-    int GetWorkshopNumber() const;
+    int GetWorkshopNumber();
     int GetRank();
     // сеттеры
     void SetName(const char* n);

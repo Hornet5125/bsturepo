@@ -142,13 +142,11 @@ bool is_solvable(int pyatnashki[4][4]) {
     }
     return ((inversions + empty_row) % 2 == 1);
 }
-
 void generate_solvable_tiles(int pyatnashki[4][4]) {
     do {
         generate_tiles(pyatnashki);
     } while (!is_solvable(pyatnashki));
 }
-
 void generate_other_solvable_tiles(int pyatnashki[4][4]) {
     do {
         int pos = define_pos(pyatnashki);
