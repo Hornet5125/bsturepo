@@ -1,5 +1,3 @@
-
 fn main(){
-    print("Hello World!");
-    return 0;
+    print!("Hello, world!");
 }
