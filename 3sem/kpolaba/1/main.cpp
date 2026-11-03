@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream> 
 using namespace std;
 enum MainMenuId {
     menu_start = 1,
@@ -13,7 +14,7 @@ enum SettingsMenuId {
     set_reset,
     set_back
 };
-int readInt(int min, int max) {
+int read_int(int min, int max) {
     int v;
     while (!(cin >> v) || v < min || v > max) {
         cin.clear();
@@ -30,9 +31,15 @@ public:
     static const int max_diff         = 3;
     static const int min_duration     = 15;
     static const int max_duration     = 60;
-    Settings() { reset(); }
-    int difficulty() const { return diff; }
-    int duration()   const { return dura; }
+    Settings() {
+        reset();
+    }
+    int difficulty() {
+         return diff;
+    }
+    int duration() {
+        return dura;
+    }
     bool set_difficulty(int value) {
         if (value < min_diff || value > max_diff) return false;
         diff = value;
@@ -52,7 +59,7 @@ private:
     int dura;
 };
 void show_settings(Settings& s) {
-    int choice = set_difficulty;   // начальное значение, чтобы войти в цикл
+    int choice = set_difficulty;
     while (choice != set_back) {
         cout << "\nНастройки\n";
         cout << "1. Сложность (сейчас: " << s.difficulty() << ")\n";
@@ -60,15 +67,15 @@ void show_settings(Settings& s) {
         cout << "3. Сброс настроек\n";
         cout << "4. Назад\n";
         cout << "Выбор: ";
-        choice = readInt(set_difficulty, set_back);
+        choice = read_int(set_difficulty, set_back);
         switch (choice) {
             case set_difficulty:
                 cout << "Сложность (" << Settings::min_diff << ".." << Settings::max_diff << "): ";
-                s.set_difficulty(readInt(Settings::min_diff, Settings::max_diff));
+                s.set_difficulty(read_int(Settings::min_diff, Settings::max_diff));
                 break;
             case set_duration:
                 cout << "Продолжительность (" << Settings::min_duration << ".." << Settings::max_duration << "): ";
-                s.set_duration(readInt(Settings::min_duration, Settings::max_duration));
+                s.set_duration(read_int(Settings::min_duration, Settings::max_duration));
                 break;
             case set_reset:
                 s.reset();
@@ -88,7 +95,7 @@ int main() {
         cout << "4. О программе\n";
         cout << "5. Выход\n";
         cout << "Выбор: ";
-        choice = readInt(menu_start, menu_exit);
+        choice = read_int(menu_start, menu_exit);
         switch (choice) {
             case menu_start:
                 cout << "Игра началась\n";
