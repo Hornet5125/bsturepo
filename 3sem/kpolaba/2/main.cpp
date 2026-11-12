@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <limits>
 #include <algorithm>
+#include <filesystem>
+#include <system_error>
 using namespace std;
 enum MainMenuId {
     menu_start = 1,
@@ -23,8 +25,8 @@ int read_int(int min, int max) {
     int v;
     while (!(cin >> v) || v < min || v > max) {
         if (cin.eof()) {
-            cin.clear();
-            return min;
+            cout << "\nКонец ввода.\n";
+            exit(0);
         }
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -231,6 +233,13 @@ void show_settings(Settings& s) {
     s.save();
 }
 int main() {
+    {
+        error_code ec;
+        filesystem::path source(__FILE__);
+        if (source.is_absolute() && std::filesystem::exists(source.parent_path(), ec)) {
+            std::filesystem::current_path(source.parent_path(), ec);
+        }
+    }
     Settings settings;
     int choice = menu_start;
     while (choice != menu_exit) {
