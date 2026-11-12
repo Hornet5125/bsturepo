@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/repos/bsturepo/3sem/kpolaba/3",
-      "program": "c:/repos/bsturepo/3sem/kpolaba/3/build/Debug/outDebug",
+      "cwd": "c:/repos/bsturepo/3sem/labiasd/1laba",
+      "program": "c:/repos/bsturepo/3sem/labiasd/1laba/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
